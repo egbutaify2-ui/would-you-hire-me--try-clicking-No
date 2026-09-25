@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Would You Hire Me?</title>
+<style>
+  :root{
+    --bg:#F5F3FA; --card:#FFFFFF; --ink:#161221; --sub:#6B6478;
+    --yes:#16A34A; --yes-ink:#FFFFFF; --no:#E11D48; --no-ink:#FFFFFF;
+    --accent:#6D28D9; --ring:#E7E2F5;
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15121F; --card:#1F1B2E; --ink:#F2EFFA; --sub:#A79FC2; --ring:#332C4A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15121F; --card:#1F1B2E; --ink:#F2EFFA; --sub:#A79FC2; --ring:#332C4A;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    padding-top:calc(24px + env(safe-area-inset-top,0px));
+    padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  }
+  .card{
+    width:100%; max-width:460px; background:var(--card); border:1px solid var(--ring);
+    border-radius:20px; padding:40px 28px 32px; text-align:center;
+    animation:rise .5s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes rise{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
+  h1{
+    margin:0 0 8px; font-size:clamp(26px,6vw,32px); letter-spacing:-0.02em; line-height:1.15;
+  }
+  h1 span{ color:var(--accent); }
+  .sub{ margin:0 0 28px; color:var(--sub); font-size:15px; }
+  .arena{
+    position:relative; min-height:220px; display:flex; align-items:center; justify-content:center; gap:14px;
+  }
+  .btn{
+    border:none; border-radius:12px; padding:14px 22px; font-size:16px; font-weight:600;
+    cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none;
+  }
+  .yes{ background:var(--yes); color:var(--yes-ink); }
+  .yes:hover{ filter:brightness(1.08); }
+  .no{ background:var(--no); color:var(--no-ink); transition:left .22s ease, top .22s ease; }
+  .hint{ min-height:20px; margin-top:18px; color:var(--sub); font-size:14px; }
+  .success{ width:100%; max-width:460px; background:var(--card); border:1px solid var(--ring);
+    border-radius:20px; padding:44px 28px; text-align:center; animation:rise .4s ease; }
+  .success h2{ margin:0 0 10px; font-size:26px; }
+  .success p{ margin:0 0 22px; color:var(--sub); }
+  .cta{ display:inline-block; background:var(--accent); color:#fff; text-decoration:none;
+    padding:14px 24px; border-radius:12px; font-weight:600; }
+  .cta:hover{ filter:brightness(1.08); }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+  <main class="card" id="card">
+    <h1>Would you <span>hire</span> me?</h1>
+    <p class="sub">Full-Stack Developer &amp; AI Engineer — Lagos, Nigeria</p>
+    <div class="arena" id="arena">
+      <button class="btn yes" id="yesBtn">Yes, obviously</button>
+      <button class="btn no" id="noBtn">No</button>
+    </div>
+    <p class="hint" id="hint">&nbsp;</p>
+  </main>
+
+  <div class="success" id="success" hidden>
+    <h2>🎉 Great choice.</h2>
+    <p>Let's talk about it.</p>
+    <a class="cta" href="https://wa.me/2347014010018" target="_blank" rel="noopener">Message me on WhatsApp</a>
+  </div>
+
+<script>
+  const arena = document.getElementById('arena');
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const hint = document.getElementById('hint');
+  const card = document.getElementById('card');
+  const success = document.getElementById('success');
+
+  const messages = [
+    "Nice try 😏","Not so fast.","Nope, try again.","Almost… not!",
+    "You really thought?","Persistent, huh?","Still no. 😄","This is just cardio now."
+  ];
+  let attempts = 0;
+  let armed = false;
+
+  function armDodge(){
+    if(armed) return;
+    const a = arena.getBoundingClientRect();
+    const b = noBtn.getBoundingClientRect();
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = (b.left - a.left) + 'px';
+    noBtn.style.top = (b.top - a.top) + 'px';
+    armed = true;
+  }
+
+  function dodge(){
+    armDodge();
+    const a = arena.getBoundingClientRect();
+    const b = noBtn.getBoundingClientRect();
+    const maxX = Math.max(a.width - b.width - 6, 0);
+    const maxY = Math.max(a.height - b.height - 6, 0);
+    noBtn.style.left = (Math.random() * maxX) + 'px';
+    noBtn.style.top = (Math.random() * maxY) + 'px';
+    hint.textContent = messages[Math.min(attempts, messages.length - 1)];
+    attempts++;
+  }
+
+  noBtn.addEventListener('pointerenter', dodge);
+  noBtn.addEventListener('click', (e) => { e.preventDefault(); dodge(); });
+  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, {passive:false});
+
+  yesBtn.addEventListener('click', () => {
+    card.hidden = true;
+    success.hidden = false;
+  });
+
+  window.addEventListener('resize', () => { armed = false; noBtn.style.position=''; noBtn.style.left=''; noBtn.style.top=''; });
+</script>
+</body>
+</html>
