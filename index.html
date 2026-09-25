@@ -92,6 +92,9 @@
   ];
   let attempts = 0;
   let armed = false;
+  let lastDodge = 0;
+  const RADIUS = 95;
+  const COOLDOWN = 160;
 
   function armDodge(){
     if(armed) return;
@@ -103,21 +106,46 @@
     armed = true;
   }
 
-  function dodge(){
+  function dodge(px, py){
     armDodge();
     const a = arena.getBoundingClientRect();
     const b = noBtn.getBoundingClientRect();
     const maxX = Math.max(a.width - b.width - 6, 0);
     const maxY = Math.max(a.height - b.height - 6, 0);
-    noBtn.style.left = (Math.random() * maxX) + 'px';
-    noBtn.style.top = (Math.random() * maxY) + 'px';
+    let x, y, tries = 0;
+    do {
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+      tries++;
+    } while (
+      px !== undefined &&
+      Math.hypot((a.left + x + b.width/2) - px, (a.top + y + b.height/2) - py) < 160 &&
+      tries < 10
+    );
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
     hint.textContent = messages[Math.min(attempts, messages.length - 1)];
     attempts++;
   }
 
-  noBtn.addEventListener('pointerenter', dodge);
-  noBtn.addEventListener('click', (e) => { e.preventDefault(); dodge(); });
-  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, {passive:false});
+  function maybeDodge(clientX, clientY){
+    const b = noBtn.getBoundingClientRect();
+    const cx = b.left + b.width / 2;
+    const cy = b.top + b.height / 2;
+    const now = Date.now();
+    if (Math.hypot(clientX - cx, clientY - cy) < RADIUS && now - lastDodge > COOLDOWN) {
+      dodge(clientX, clientY);
+      lastDodge = now;
+    }
+  }
+
+  document.addEventListener('pointermove', (e) => maybeDodge(e.clientX, e.clientY));
+  noBtn.addEventListener('click', (e) => { e.preventDefault(); dodge(e.clientX, e.clientY); });
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    dodge(t.clientX, t.clientY);
+  }, {passive:false});
 
   yesBtn.addEventListener('click', () => {
     card.hidden = true;
