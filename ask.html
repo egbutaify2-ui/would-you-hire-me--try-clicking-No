@@ -69,7 +69,8 @@
   <div class="chips" id="chips">
     <button class="chip" type="button">What do you do?</button>
     <button class="chip" type="button">Tell me about StackIt</button>
-    <button class="chip" type="button">Are you open to work?</button>
+    <button class="chip" type="button">How many years of experience?</button>
+    <button class="chip" type="button">What's your rate?</button>
     <button class="chip" type="button">How do I contact you?</button>
   </div>
   <form id="form" class="inputRow">
@@ -85,10 +86,12 @@
     { kws:["skill","stack","tech","technology","frontend","backend","react","node","postgres","typescript","javascript","language","do you do"], a:"Frontend: React, JavaScript, TypeScript, HTML5, CSS3. Backend: Node.js, PostgreSQL, REST APIs. I work across the whole stack, end to end." },
     { kws:["ai tool","claude","cursor","copilot","gemini","perplexity","windsurf","v0","meta muse","google flow","ai engineer"], a:"I'm an intermediate user of Claude, Cursor, Google Flow, Meta Muse, GitHub Copilot, Perplexity, Windsurf, Gemini, and v0 — I use them daily to speed up development." },
     { kws:["stackit","fintech","savings","founder"], a:"I'm the Founder of StackIt, a mobile social savings fintech platform. I led it from concept to implementation — architecture, backend, API integrations, database design, and the mobile app itself." },
-    { kws:["project","portfolio","built","sanity","lenslink","github"], a:"One I can point to publicly: Sanity LensLink Agent, an AI camera-gear compatibility agent powered by Sanity structured content. I've got more in progress that aren't public yet." },
-    { kws:["hire","job","freelance","available","open","contract","collaborate"], a:"Yes — I'm open to freelance/contract work, collaborations, and full-time roles. Best way in is WhatsApp or LinkedIn, both on my GitHub profile." },
+    { kws:["project","portfolio","built","sanity","lenslink","github"], a:"One I can point to publicly: Sanity LensLink Agent, an AI camera-gear compatibility agent powered by Sanity structured content. I've got more in progress that aren't public yet — check github.com/egbutaify2-ui for the latest." },
+    { kws:["hire","job","freelance","open","contract","collaborate"], a:"Yes — I'm open to freelance/contract work, collaborations, and full-time roles. Best way in is WhatsApp or LinkedIn, both on my GitHub profile." },
     { kws:["contact","reach","whatsapp","phone","number","email","linkedin","call","talk"], a:"WhatsApp/Call: +234 701 401 0018. LinkedIn is also linked on my GitHub profile — reach out any time." },
-    { kws:["where","location","based","lagos","nigeria","live"], a:"Based in Lagos, Nigeria." },
+    { kws:["where","location","based","lagos","nigeria","live","timezone","time zone"], a:"Based in Lagos, Nigeria — West Africa Time (UTC+1), no daylight saving to worry about." },
+    { kws:["resume","cv","reference","recommendation"], a:"You can check out my code and projects at github.com/egbutaify2-ui. For a full CV or references, message me on WhatsApp and I'll send them over." },
+    { kws:["charge","cost","rate","price","pricing","budget","quote","salary","pay","fee","years","experience","senior","junior","level","start date","notice","timeline","team","alone","solo","remote","relocate","onsite","available","availability"], a:"That one's best answered directly rather than guessed at here. Message me on WhatsApp — +234 701 401 0018 — and I'll give you a straight answer." },
     { kws:["game","dodge","no button"], a:"You found the other one too — the \"Would You Hire Me?\" game where No runs from your cursor. This bot is the polite version." },
     { kws:["hello","hi","hey","sup","yo","morning","evening"], a:"Hey! Ask me anything about Ify — skills, projects, StackIt, or how to reach him." }
   ];
@@ -102,7 +105,7 @@
       if(score > bestScore){ bestScore = score; best = entry; }
     }
     if(best) return best.a;
-    return "I don't have a scripted answer for that one — try asking about skills, StackIt, projects, or how to reach him, or just message him directly on WhatsApp.";
+    return "I don't have a scripted answer for that one — for anything specific, just message me directly on WhatsApp (+234 701 401 0018) and I'll get back to you.";
   }
 
   const chat = document.getElementById('chat');
